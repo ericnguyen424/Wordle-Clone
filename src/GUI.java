@@ -7,7 +7,7 @@ import java.awt.event.KeyListener;
  * This class will handle all of the visual aspects of the game
  * Eric Nguyen
  */
-public class GUI extends JPanel implements KeyListener {
+public class GUI extends JPanel {
     private GameState gameState;
     public GUI(GameState sentGameState) {
         this.gameState = sentGameState;
@@ -17,9 +17,12 @@ public class GUI extends JPanel implements KeyListener {
 
         frame.setContentPane(this);
 
+        //Setting the size of our frame
         this.setMinimumSize(new Dimension(1000, 1000));
         this.setPreferredSize(new Dimension(1000, 1000));
         this.setMaximumSize(new Dimension(1000, 1000));
+
+
         frame.pack();
 
         frame.setVisible(true);
@@ -28,30 +31,8 @@ public class GUI extends JPanel implements KeyListener {
     }
 
     public void paintComponent(Graphics g) {
-        char[][] gameBoard = gameState.getGameBoard();
-        int x = 200;
-        int y = 200;
-        for (int i = 0; i < 6; i++) {
-            for (int j = 0; j < 5; j++) {
-                g.drawString(String.valueOf(gameBoard[i][j]), x, y);
-                x += 10;
-            }
-            y+= 20;
-        }
+        gameState.drawGameBoard(g);
+        System.out.println("paint called");
     }
 
-    @Override
-    public void keyTyped(KeyEvent e) {
-        System.out.println("Key typed: " + e.getKeyChar());
-    }
-
-    @Override
-    public void keyPressed(KeyEvent e) {
-
-    }
-
-    @Override
-    public void keyReleased(KeyEvent e) {
-
-    }
 }

@@ -2,18 +2,12 @@ import java.util.Scanner;
 
 public class WordleMain {
     private String secretWord;
-    private String pathFile;
     private GameState gameState;
     private GUI gui;
-    private int guessCount;
-    private String userGuess;
-    private String generatedWord;
-    public WordleMain(String sentPathFile, GameState sentGameState, GUI sentGUI) {
+
+    public WordleMain(GameState sentGameState, GUI sentGUI) {
         this.gameState = sentGameState;
         this.gui = sentGUI;
-        this.pathFile = sentPathFile;
-        this.generatedWord = WordleHelper.randomWordSelection(pathFile);
-        this.guessCount = 1;
     }
 
     /**
@@ -39,19 +33,17 @@ public class WordleMain {
         String uncheckedGuess;
         //This block of code asks the user for their guess, then it validates it. If the guess is not valid,
         //the guess will not be entered and the terminal will ask the user for their guess again.
+        Scanner in = new Scanner(System.in);
         do {
-            Scanner in = new Scanner(System.in);
-            System.out.print("Enter guess #" + guessCount + ": ");
-            uncheckedGuess = in.next();
-
-            if (!WordleHelper.validateGuess(uncheckedGuess, pathFile)) {
+            System.out.print("Enter guess #" + gameState.getGuessCount() + ": ");
+            uncheckedGuess = in.nextLine();
+            if (!WordleHelper.validateGuess(uncheckedGuess, gameState.getPathFile())) {
                 System.out.println("Invalid word, try again");
             }
-            in.close();
-        } while (!WordleHelper.validateGuess(uncheckedGuess, pathFile));
+        } while (!WordleHelper.validateGuess(uncheckedGuess, gameState.getPathFile()));
         //Set the current userGuess to the validated guess, and increment the guessCount by 1.
-        setUserGuess(uncheckedGuess);
-        addGuessCount(1);
+        gameState.setUserGuess(uncheckedGuess);
+        gameState.addGuessCount(1);
 
         //close the scanner to save resources
 
@@ -62,61 +54,11 @@ public class WordleMain {
      * @return
      */
     public boolean getHasWon() {
-        if (getUserGuess().toUpperCase().equals(getGeneratedWord().toUpperCase())) {
+        if (gameState.getUserGuess().toUpperCase().equals(gameState.getGeneratedWord().toUpperCase())) {
             System.out.println("You guessed it!");
             return true;
         }
         return false;
     }
-
-    /**
-     * Mutator for userGuess
-     * @param newUserGuess
-     */
-    public void setUserGuess(String newUserGuess) {
-        this.userGuess = newUserGuess;
-    }
-
-    /**
-     * Mutator for guessCount
-     * @param increment
-     */
-    public void addGuessCount(int increment) {
-        this.guessCount += increment;
-    }
-
-    /**
-     * Mutator for generatedWord
-     * @param newGeneratedWord
-     */
-    public void setGeneratedWord(String newGeneratedWord) {
-        this.generatedWord = newGeneratedWord;
-    }
-
-    /**
-     * Accessor for guessCount
-     * @return
-     */
-    public int getGuessCount() {
-        return this.guessCount;
-    }
-
-    /**
-     * Accessor for userGuess
-     * @return
-     */
-    public String getUserGuess() {
-        return this.userGuess;
-    }
-
-    /**
-     * Accessor for generatedWord
-     * @return
-     */
-    public String getGeneratedWord() {
-        return this.generatedWord;
-    }
-
-
 
 }
